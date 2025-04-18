@@ -44,7 +44,6 @@
   },
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
-    "@cacheable/node-cache": "^1.4.0",
     "@hapi/boom": "^9.1.3",
     "@whiskeysockets/eslint-config": "github:whiskeysockets/eslint-config",
     "async-lock": "^1.4.1",
@@ -53,7 +52,6 @@
     "cache-manager": "^6.4.2",
     "libphonenumber-js": "^1.10.20",
     "libsignal": "github:WhiskeySockets/libsignal-node",
-    "lodash": "^4.17.21",
     "music-metadata": "^7.12.3",
     "node-cache": "^5.1.2",
     "pino": "^9.6",

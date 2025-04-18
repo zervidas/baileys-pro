@@ -1,6 +1,6 @@
 {
   "name": "baileys-pro",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "WhatsApp API",
   "keywords": [
     "whatsapp",
@@ -12,9 +12,9 @@
     "automation",
     "multi-device"
   ],
-  "homepage": "https://github.com/WhiskeySockets/Baileys",
+  "homepage": "https://github.com/zervidas/baileys-pro",
   "repository": {
-    "url": "git@github.com:WhiskeySockets/Baileys.git"
+    "url": "git@github.com:zervidas/baileys-pro.git"
   },
   "license": "MIT",
   "author": "Adhiraj Singh",

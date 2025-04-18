@@ -6,14 +6,18 @@
 
 </div>
 
-Baileys is a WebSockets-based TypeScript library for interacting with the WhatsApp Web API.
+**Baileys** is a WebSockets-based TypeScript library for interacting with the WhatsApp Web API.  
+This is **not the official Baileys library**, but a **modified and extended version** developed independently to add functionalities that many developers have requested. These enhancements aim to improve flexibility, offer better developer experience, and provide tools that are missing from the original version.
 
-# Disclaimer
-This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates.
-The official WhatsApp website can be found at whatsapp.com. "WhatsApp" as well as related names, marks, emblems and images are registered trademarks of their respective owners.
+# Disclaimer  
+This project is **not affiliated with, endorsed by, or officially connected to WhatsApp Inc., Meta Platforms, Inc., or any of their subsidiaries**. The official WhatsApp website can be found at [whatsapp.com](https://whatsapp.com). "WhatsApp," along with related names, marks, and logos, are registered trademarks and the intellectual property of their respective owners.
 
-The maintainers of Baileys do not in any way condone the use of this application in practices that violate the Terms of Service of WhatsApp. The maintainers of this application call upon the personal responsibility of its users to use this application in a fair way, as it is intended to be used.
-Use at your own discretion. Do not spam people with this. We discourage any stalkerware, bulk or automated messaging usage.
+This modified version of Baileys was created with the intention of empowering developers, but it **must be used responsibly**. The maintainers **strongly discourage** any usage that goes against WhatsApp’s [Terms of Service](https://www.whatsapp.com/legal/terms-of-service). This includes—but is not limited to—spamming, bulk or automated messaging, stalking, scraping user data, or deploying it in any way that violates privacy, consent, or platform integrity.
+
+This project is provided **as-is** and should be used with **extreme caution**.  
+**You are solely responsible** for how you choose to use this library. Always ensure your use case is ethical, legal, and respects the rights and privacy of others.
+
+**Use at your own discretion.** Respect platform rules, user boundaries, and stay within legal and moral lines.
 
 ## Example
 
@@ -135,6 +139,27 @@ const { default: makeWASocket } = require("baileys-pro")
     - [Get All Participating Groups Metadata](#get-all-participating-groups-metadata)
     - [Toggle Ephemeral](#toggle-ephemeral)
     - [Change Add Mode](#change-add-mode)
+- [Newsletter](#newsletter)
+    - [Subscribe to Newsletter Updates](#subscribe-to-newsletter-updates)
+    - [Update Reaction Mode](#update-reaction-mode)
+    - [Update Newsletter Description](#update-newsletter-description)
+    - [Update Newsletter Name](#update-newsletter-name)
+    - [Update Newsletter Picture](#update-newsletter-picture)
+    - [Remove Newsletter Picture](#remove-newsletter-picture)
+    - [Follow a Newsletter](#follow-a-newsletter)
+    - [Unfollow a Newsletter](#unfollow-a-newsletter)
+    - [Mute a Newsletter](#mute-a-newsletter)
+    - [Unmute a Newsletter](#unmute-a-newsletter)
+    - [Perform a Newsletter Action (Generic)](#perform-a-newsletter-action-generic)
+    - [Create a Newsletter](#create-a-newsletter)
+    - [Fetch Newsletter Metadata](#fetch-newsletter-metadata)
+    - [Get Admin Count](#get-admin-count)
+    - [Change Newsletter Owner](#change-newsletter-owner)
+    - [Demote Newsletter Admin](#demote-newsletter-admin)
+    - [Delete Newsletter](#delete-newsletter)
+    - [React to a Message in Newsletter](#react-to-a-message-in-newsletter)
+    - [Fetch Messages in Newsletter](#fetch-messages-in-newsletter)
+    - [Fetch Updates in Newsletter](#fetch-updates-in-newsletter)
 - [Privacy](#privacy)
     - [Block/Unblock User](#blockunblock-user)
     - [Get Privacy Settings](#get-privacy-settings)
@@ -201,7 +226,7 @@ if (!sock.authState.creds.registered) {
 
 - Costum Pairing
 if (!sock.authState.creds.registered) {
-    const pair = "12345678" // only 8 alphanumeric (no more or less)
+    const pair = "AB123C4D" // only 8 alphanumeric (no more or less)
     const number = 'XXXXXXXXXXX'
     const code = await sock.requestPairingCode(number, pair)
     console.log(code)
@@ -461,13 +486,13 @@ sock.sendMessage(jid, {
      text: "Hello World !",
      footer: "Baileys - 2025",
      buttons: [
-     {
-     buttonId: `🚀`, 
-     buttonText: {
-     displayText: '🗿'
-     },
-     type: 1 
-     }
+         {
+         buttonId: `🚀`, 
+         buttonText: {
+             displayText: '🗿'
+         },
+         type: 1 
+         }
      ],
      headerType: 1,
      viewOnce: true
@@ -1490,6 +1515,118 @@ await sock.groupMemberAddMode(
     jid,
     'all_member_add' // or 'admin_add'
 )
+```
+
+## Newsletter
+
+- To perform most actions you must be the newsletter creator or admin
+
+### Subscribe to Newsletter Updates
+```javascript
+await sock.subscribeNewsletterUpdates(jid)
+```
+
+### Update Reaction Mode
+```javascript
+await sock.newsletterReactionMode(jid, mode) // e.g., 'enabled', 'disabled'
+```
+
+### Update Newsletter Description
+```javascript
+await sock.newsletterUpdateDescription(jid, 'Your new description')
+```
+
+### Update Newsletter Name
+```javascript
+await sock.newsletterUpdateName(jid, 'New Name')
+```
+
+### Update Newsletter Picture
+```javascript
+await sock.newsletterUpdatePicture(jid, content)
+```
+
+### Remove Newsletter Picture
+```javascript
+await sock.newsletterRemovePicture(jid)
+```
+
+### Follow a Newsletter
+```javascript
+await sock.newsletterFollow(jid)
+```
+
+### Unfollow a Newsletter
+```javascript
+await sock.newsletterUnfollow(jid)
+```
+
+### Mute a Newsletter
+```javascript
+await sock.newsletterMute(jid)
+```
+
+### Unmute a Newsletter
+```javascript
+await sock.newsletterUnmute(jid)
+```
+
+### Perform a Newsletter Action (Generic)
+```javascript
+await sock.newsletterAction(jid, 'mute' | 'unmute' | 'follow' | 'unfollow')
+```
+
+### Create a Newsletter
+```javascript
+const newsletter = await sock.newsletterCreate('Newsletter Name', 'Newsletter Description')
+console.log(newsletter)
+```
+
+### Fetch Newsletter Metadata
+```javascript
+// https://whatsapp.com/channel/$key
+const metadata = await sock.newsletterMetadata(type, key, role) // type: 'invite' or 'direct', role: 'GUEST', etc.
+```
+
+### Get Admin Count
+```javascript
+const count = await sock.newsletterAdminCount(jid)
+```
+
+### Change Newsletter Owner
+```javascript
+/**user is Lid, not Jid */
+await sock.newsletterChangeOwner(jid, userLid)
+```
+
+### Demote Newsletter Admin
+```javascript
+/**user is Lid, not Jid */
+await sock.newsletterDemote(jid, userLid)
+```
+
+### Delete Newsletter
+```javascript
+await sock.newsletterDelete(jid)
+```
+
+### React to a Message in Newsletter
+```javascript
+// Copying the message link in the Newsletter will get
+// https://whatsapp.com/channel/XXXXXXXXX/$serverId
+
+await sock.newsletterReactMessage(jid, serverId, '❤️')
+// pass null or empty to remove reaction
+```
+
+### Fetch Messages in Newsletter
+```javascript
+const messages = await sock.newsletterFetchMessages('direct' | 'invite', key, count, after)
+```
+
+### Fetch Updates in Newsletter
+```javascript
+const updates = await sock.newsletterFetchUpdates(jid, count, after, since)
 ```
 
 ## Privacy

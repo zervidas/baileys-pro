@@ -42,6 +42,14 @@ Then import your code using:
 ```javascript
 const { default: makeWASocket } = require("baileys-pro")
 ```
+# Links
+
+#### Official
+- [Discord](https://discord.gg/WeJM5FP9GG)
+- [Docs](https://guide.whiskeysockets.io/)
+
+#### Baileys Pro
+- [WhatsApp](https://whatsapp.com/channel/0029Vb89ifxH5JM0fh2VvM2U)
 
 # Index
 

@@ -294,6 +294,15 @@ const sock = makeWASocket({
         markOnlineOnConnect: false
     })
     ```
+
+### Custom generateMessageID Function
+- If you want to receive notifications in whatsapp app, set `markOnlineOnConnect` to `false`
+    ```javascript
+    const sock = makeWASocket({
+        generateMessageID: () => crypto.randomBytes(8).toString('hex'),
+        generateMessageIDV2: (id) => /* Custom yourself */
+    })
+    ```
 ## Saving & Restoring Sessions
 
 You obviously don't want to keep scanning the QR code every time you want to connect.
@@ -303,7 +312,8 @@ So, you can load the credentials to log back in:
 const makeWASocket = require("baileys-pro").default;
 const { useMultiFileAuthState } = require("baileys-pro");
 
-const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
+// enable authDebug to display session logs
+const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys', { authDebug: true })
 
 // will use the given state to connect
 // so if valid credentials are available -- it'll connect without QR

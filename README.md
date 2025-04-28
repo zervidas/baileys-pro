@@ -61,7 +61,7 @@ const { default: makeWASocket } = require("baileys-pro")
     - [Caching Group Metadata (Recommended)](#caching-group-metadata-recommended)
     - [Improve Retry System & Decrypt Poll Votes](#improve-retry-system--decrypt-poll-votes)
     - [Receive Notifications in Whatsapp App](#receive-notifications-in-whatsapp-app)
-    - [Custom generateMessageID Function](#custom-generatemessageid-unction)
+    - [Custom generateMessageID Function](#custom-generatemessageid-function)
 - [Save Auth Info](#saving--restoring-sessions)
 - [Handling Events](#handling-events)
     - [Example to Start](#example-to-start)
@@ -81,6 +81,8 @@ const { default: makeWASocket } = require("baileys-pro")
         - [Mention Status](#mention-status)
         - [Result Poll From Newsletter](#result-poll-from-newsletter)
         - [SendAlbumMessage](#send-album-message)
+        - [List Message](#list-message)
+        - [Carousel Message](#carousel-message)
         - [Interactive Response](#interactive-response)
         - [Request Payment](#request-payment)
         - [Event Message](#event-message)
@@ -523,11 +525,11 @@ sock.sendMessage(jid, {
      footer: "Baileys - 2025",
      buttons: [
          {
-         buttonId: `🚀`, 
-         buttonText: {
-             displayText: '🗿'
-         },
-         type: 1 
+             buttonId: `🚀`, 
+             buttonText: {
+                 displayText: '🗿'
+             },
+             type: 1 
          }
      ],
      headerType: 1,
@@ -702,7 +704,7 @@ await sock.StatusMentions(
 
 #### Result Poll From Newsletter
 ```javascript
-await client.sendMessage(
+await sock.sendMessage(
     jid,
     {
         pollResult: {
@@ -736,9 +738,60 @@ await sock.sendAlbumMessage(
 
 ```
 
+#### List Message
+```javascript
+const sections = [
+    {
+	title: "Section 1",
+	rows: [
+	    {title: "Option 1", rowId: "option1"},
+	    {title: "Option 2", rowId: "option2", description: "This is a description"}
+	]
+    },
+   {
+	title: "Section 2",
+	rows: [
+	    {title: "Option 3", rowId: "option3"},
+	    {title: "Option 4", rowId: "option4", description: "This is a description V2"}
+	]
+    },
+]
+
+const listMessage = {
+  text: "This is a list",
+  footer: "nice footer, link: https://google.com",
+  title: "Amazing boldfaced list title",
+  buttonText: "Required, text on the button to view the list",
+  sections
+}
+
+await sock.sendMessage(jid, listMessage)
+```
+
+#### Carousel Message
+```javascript
+sock.sendMessage(jid, {
+    text: 'hah',
+    footer: 'ya',
+    cards: [
+        {
+            title: 'oke',
+            image: { url: 'https://example.com/image.jpeg' },
+            caption: 'tes'
+        },
+        {
+            title: 'oke',
+            image: { url: 'https://example.com/image.jpeg' },
+            caption: 'tes'
+        }
+    ],
+    viewOnce: true
+})
+```
+
 #### Interactive Response 
 ```javascript
-await client.sendMessage(
+await sock.sendMessage(
     jid, 
     {
         buttonReply: {
@@ -757,7 +810,7 @@ await client.sendMessage(
 #### Request Payment
 ```javascript
 - Example non media sticker
-await client.sendMessage(
+await sock.sendMessage(
     jid,
     {
         requestPayment: {      
@@ -772,7 +825,7 @@ await client.sendMessage(
 )
 
 - with media sticker buffer
-await client.sendMessage(
+await sock.sendMessage(
     jid,
     {
         requestPayment: {      
@@ -787,7 +840,7 @@ await client.sendMessage(
 )
 
 - with media sticker url
-await client.sendMessage(
+await sock.sendMessage(
     jid,
     {
         requestPayment: {      
@@ -804,7 +857,7 @@ await client.sendMessage(
 
 #### Event Message
 ```javascript
-await client.sendMessage(
+await sock.sendMessage(
    jid, 
    { 
        event: {
@@ -828,7 +881,7 @@ await client.sendMessage(
 #### Interactive
 ```javascript
 - Example non header media
-await client.sendMessage(
+await sock.sendMessage(
     jid,
     {
         text: "Description Of Messages", //Additional information
@@ -857,8 +910,8 @@ await client.sendMessage(
   }
 )
 
-- Example with media
-await client.sendMessage(
+// Example with media
+await sock.sendMessage(
     jid,
     {
         image: { url : "https://example.jpg" }, // Can buffer
@@ -889,8 +942,8 @@ await client.sendMessage(
   }
 )
 
-- Example with header product
-await client.sendMessage(
+// Example with header product
+await sock.sendMessage(
     jid,
     {
         product: {

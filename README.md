@@ -301,8 +301,18 @@ const sock = makeWASocket({
 - you can modify the messageId generator function against the socket
     ```javascript
     const sock = makeWASocket({
-        generateMessageID: () => crypto.randomBytes(8).toString('hex'),
-        generateMessageIDV2: (id) => /* Custom yourself */
+        generateMessageID: () => crypto.randomBytes(11).toString('hex').toUpperCase(),
+        generateMessageIDV2: (userId) => {
+            const hash = crypto.createHash('sha256').update(userId).digest('hex').toUpperCase();
+            const randomPart = crypto.randomBytes(11).toString('hex').toUpperCase();
+            const combined = hash + randomPart;
+            let result = '';
+            for (let i = 0; i < 22; i++) {
+                const randomIndex = crypto.randomBytes(1)[0] % combined.length;
+                result += combined[randomIndex];
+            }
+            return result;
+        }
     })
     ```
 ## Saving & Restoring Sessions
@@ -690,7 +700,7 @@ await sock.sendMessage(
 #### Mention Status
 - [ jid ] If the Jid Group and Jid Private Chat are included in the JID list, try to make the JID group first starting from the Jid Private Chat or Jid Private Chat in the middle between the group Jid
 ```javascript
-await sock.StatusMentions(
+await sock.sendStatusMentions(
      {
         text: "Hello", // or image / video / audio ( url or buffer )
      },

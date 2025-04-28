@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { EventEmitter } from 'events';
 import { URL } from 'url';
 import { SocketConfig } from '../../Types';

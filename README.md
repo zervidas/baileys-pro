@@ -61,7 +61,7 @@ const { default: makeWASocket } = require("baileys-pro")
     - [Caching Group Metadata (Recommended)](#caching-group-metadata-recommended)
     - [Improve Retry System & Decrypt Poll Votes](#improve-retry-system--decrypt-poll-votes)
     - [Receive Notifications in Whatsapp App](#receive-notifications-in-whatsapp-app)
-
+    - [Custom generateMessageID Function](#custom-generatemessageid-unction)
 - [Save Auth Info](#saving--restoring-sessions)
 - [Handling Events](#handling-events)
     - [Example to Start](#example-to-start)
@@ -296,7 +296,7 @@ const sock = makeWASocket({
     ```
 
 ### Custom generateMessageID Function
-- If you want to receive notifications in whatsapp app, set `markOnlineOnConnect` to `false`
+- you can modify the messageId generator function against the socket
     ```javascript
     const sock = makeWASocket({
         generateMessageID: () => crypto.randomBytes(8).toString('hex'),
@@ -320,6 +320,24 @@ const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys', { 
 const sock = makeWASocket({ auth: state })
 
 // this will be called as soon as the credentials are updated
+sock.ev.on('creds.update', saveCreds)
+```
+
+You can sync cache on MultiFileAuthState
+```javascript
+const { state, saveCreds, cache: authCache } = await useMultiFileAuthState('auth_info_baileys', { syncCache: true })
+
+const sock = makeWASocket({
+  auth: {
+    creds: state.creds,
+    keys: makeCacheableSignalKeyStore(
+      state.keys, 
+      pino().child({ level: "silent", stream: "store" }),
+      authCache
+    )
+  }
+})
+
 sock.ev.on('creds.update', saveCreds)
 ```
 
